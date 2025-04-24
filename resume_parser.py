@@ -185,7 +185,7 @@ def parse_resume_with_gemini(resume_text):
     return clean_text
 
 
-🚀 Streamlit App
+# 🚀 Streamlit App
 st.title("📄 ATS SCORE")
 st.markdown("Upload a resume PDF")
 
