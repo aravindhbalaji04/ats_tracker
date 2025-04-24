@@ -185,63 +185,63 @@ def parse_resume_with_gemini(resume_text):
     return clean_text
 
 
-# 🚀 Streamlit App
-# st.title("📄 ATS SCORE")
-# st.markdown("Upload a resume PDF")
+🚀 Streamlit App
+st.title("📄 ATS SCORE")
+st.markdown("Upload a resume PDF")
 
-# uploaded_file = st.file_uploader("Drag and drop a resume PDF here", type=["pdf"])
+uploaded_file = st.file_uploader("Drag and drop a resume PDF here", type=["pdf"])
 
-# if uploaded_file is not None:
-#     with st.spinner("🔍 Extracting text from PDF..."):
-#         resume_bytes = uploaded_file.read()
-#         resume_text = extract_text_from_pdf(uploaded_file)
+if uploaded_file is not None:
+    with st.spinner("🔍 Extracting text from PDF..."):
+        resume_bytes = uploaded_file.read()
+        resume_text = extract_text_from_pdf(uploaded_file)
 
-#     with st.spinner("🤖 Parsing resume with Gemini..."):
-#         parsed_json_text = parse_resume_with_gemini(resume_text)
+    with st.spinner("🤖 Parsing resume with Gemini..."):
+        parsed_json_text = parse_resume_with_gemini(resume_text)
 
-#     with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as temp_file:
-#       temp_file.write(resume_bytes)
-#       temp_path = temp_file.name
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as temp_file:
+      temp_file.write(resume_bytes)
+      temp_path = temp_file.name
 
-#     try:
-#         parsed_output = json.loads(parsed_json_text)
-#         st.success("✅ Resume successfully parsed!")
-#         st.subheader("🧾 Parsed Resume (JSON):")
-#         st.json(parsed_output)
+    try:
+        parsed_output = json.loads(parsed_json_text)
+        st.success("✅ Resume successfully parsed!")
+        st.subheader("🧾 Parsed Resume (JSON):")
+        st.json(parsed_output)
 
-#         st.subheader("📊 ATS Score:")
-#         ats_score = calculate_score(parsed_output, analyze_resume(temp_path))
-#         st.write(f"**Score:** {ats_score}/100")
+        st.subheader("📊 ATS Score:")
+        ats_score = calculate_score(parsed_output, analyze_resume(temp_path))
+        st.write(f"**Score:** {ats_score}/100")
 
-#     except Exception as e:
-#         st.error("⚠️ Failed to parse JSON output.")
-#         st.text(f"Raw Output:\n{parsed_json_text}")
-#         st.text(f"Error: {e}")
+    except Exception as e:
+        st.error("⚠️ Failed to parse JSON output.")
+        st.text(f"Raw Output:\n{parsed_json_text}")
+        st.text(f"Error: {e}")
 
 
-if __name__ == "__main__":
-    st.set_page_config(page_title="ATS Resume Evaluator")
-    st.title("📄 AI Resume Evaluator")
-    uploaded_file = st.file_uploader("Upload your resume (PDF only)", type="pdf")
+# if __name__ == "__main__":
+#     st.set_page_config(page_title="ATS Resume Evaluator")
+#     st.title("📄 AI Resume Evaluator")
+#     uploaded_file = st.file_uploader("Upload your resume (PDF only)", type="pdf")
 
-    if uploaded_file:
-        with tempfile.NamedTemporaryFile(delete=False) as tmp:
-            tmp.write(uploaded_file.read())
-            tmp_path = tmp.name
+#     if uploaded_file:
+#         with tempfile.NamedTemporaryFile(delete=False) as tmp:
+#             tmp.write(uploaded_file.read())
+#             tmp_path = tmp.name
 
-        with fitz.open(tmp_path) as doc:
-            text = ""
-            for page in doc:
-                text += page.get_text()
+#         with fitz.open(tmp_path) as doc:
+#             text = ""
+#             for page in doc:
+#                 text += page.get_text()
 
-        # Call Gemini parser
-        model = genai.GenerativeModel('gemini-1.5-flash')
-        parsed = model.generate_content(PROMPT_TEMPLATE + text).text
+#         # Call Gemini parser
+#         model = genai.GenerativeModel('gemini-1.5-flash')
+#         parsed = model.generate_content(PROMPT_TEMPLATE + text).text
 
-        # Parse & score
-        format_score = analyze_resume(text)
-        final_score = calculate_score(parsed, format_score)
+#         # Parse & score
+#         format_score = analyze_resume(text)
+#         final_score = calculate_score(parsed, format_score)
 
-        st.subheader("🎯 ATS Score")
-        st.write(f"**Final Score**: {final_score}/100")
-        st.json(parsed)
+#         st.subheader("🎯 ATS Score")
+#         st.write(f"**Final Score**: {final_score}/100")
+#         st.json(parsed)
