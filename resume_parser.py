@@ -9,7 +9,7 @@ import re
 import tempfile
 
 # 🧠 Configure Google Gemini API
-os.environ["GOOGLE_API_KEY"] = "AIzaSyDfzvb_QnYsh0S_0Yk4LWVcvTiU936zjuo"
+os.environ["GOOGLE_API_KEY"] = st.secrets["GOOGLE_API_KEY"]
 genai.configure(api_key=os.environ["GOOGLE_API_KEY"])
 
 # 📝 Gemini Prompt Template
