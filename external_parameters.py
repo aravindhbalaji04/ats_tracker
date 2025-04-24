@@ -1,6 +1,7 @@
 import os
 import re
 import fitz  # PyMuPDF
+import tempfile
 
 def analyze_resume(file_path):
     results = {}
