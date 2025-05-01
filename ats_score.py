@@ -16,9 +16,9 @@ def calculate_score(parsed_output, format_score):
     3. Bonus points must be applied exactly as specified
     4. Penalties must be applied exactly as specified
     5. Final score is calculated as: (Sum of category scores)/4
-
+    
     ### Strict Scoring Rubric:
-
+    
     1. Experience Relevance (Max 50)
     - 45-50: Exact role match + required tools + industry trends
     - 40-44: Near-exact role match + most tools
@@ -26,7 +26,7 @@ def calculate_score(parsed_output, format_score):
     - 30-34: Somewhat related role
     - 0-29: Unrelated experience
     - Penalty: -10 for each missing required tool/technology
-
+    
     2. Internship Quality (Max 50)
     - 45-50: 6+ months in-person + measurable impact + innovation
     - 40-44: 6+ months in-person + measurable impact
@@ -36,7 +36,7 @@ def calculate_score(parsed_output, format_score):
     - 20-24: <3 months remote
     - Bonus: +10 for published work/product launch (Don't Add if Score is already 41 or greater)
     - Penalty: -15 for virtual-only internships
-
+    
     3. Skill Alignment (Max 100)
     - 90-100: All required skills + advanced certifications
     - 80-89: All required skills + some certifications
@@ -44,21 +44,21 @@ def calculate_score(parsed_output, format_score):
     - 60-69: Some required skills
     - 0-59: Few required skills
     - Bonus: +5 per relevant certification beyond requirements
-
+    
     4. Impactful Contributions (Max 100)
     - Quantifiable impacts only (must include metrics)
     - 20 points per major impact (max 100)
     - Must include: what changed + by how much + timeframe
-
+    
     5. Soft Skills (Max 100)
     - 25 points per category (communication, teamwork, leadership, mentoring)
     - Must have specific examples for each point awarded
-
+    
     6. Miscellaneous Score from Resume Evaluation, ATS Parse Rate, Repetition,
       Grammar & Language, Buzzwords, Active Voice (Max 100)
-
+    
     7. Format Score at the end of this prompt (Max 100)
-
+    
     ### Strict Evaluation Process:
     1. Analyze each section separately
     2. Apply scores exactly as defined in rubric
@@ -81,22 +81,74 @@ def calculate_score(parsed_output, format_score):
     5. Round to nearest whole number
     6. Never deviate from predefined weights or ranges
     7. Ensure sum of all weights equals exactly 1.0 (100%)
-
+    
     ### Required Output Format:
     {
-    "scores": {
-        "Skill_Alignment": X,        # 45% weight
-        "Experience_Relevance": X,   # 15% weight
-        "Internship_Quality": X,     # 15% weight
-        "Soft_Skills": X,           # 5% weight
-        "Impactful_Contributions": X, # 10% weight
-        "Miscellaneous_Score": X, # 5% weight
-        "Format_Score": X, # 5% weight
-        "weighted_total": X         # Calculated final score
-    },
-    "evaluation": "Brief justification of scores"
+      "scores": {
+        "Skill_Alignment": {
+          "score": X,
+          "subsections": {
+            "required_skills": {"score": X/100, "comment": "..."},
+            "certifications": {"score": X/100, "comment": "..."},
+            "bonus_certifications": {"bonus": X, "comment": "..."}
+          }
+        },
+        "Experience_Relevance": {
+          "score": X,
+          "subsections": {
+            "role_match": {"score": X/50, "comment": "..."},
+            "tools_covered": {"score": X/50, "comment": "..."},
+            "penalties": {"penalty": -X, "comment": "..."}
+          }
+        },
+        "Internship_Quality": {
+          "score": X,
+          "subsections": {
+            "duration_type": {"score": X/50, "comment": "..."},
+            "impact": {"score": X/50, "comment": "..."},
+            "innovation_bonus": {"bonus": +X, "comment": "..."},
+            "penalties": {"penalty": -X, "comment": "..."}
+          }
+        },
+        "Impactful_Contributions": {
+          "score": X,
+          "subsections": {
+            "contribution_1": {"score": X/100, "comment": "..."},
+            "contribution_2": {"score": X/100, "comment": "..."},
+            "...": {}
+          }
+        },
+        "Soft_Skills": {
+          "score": X,
+          "subsections": {
+            "communication": {"score": X/25, "comment": "..."},
+            "teamwork": {"score": X/25, "comment": "..."},
+            "leadership": {"score": X/25, "comment": "..."},
+            "mentoring": {"score": X/25, "comment": "..."}
+          }
+        },
+        "Miscellaneous_Score": {
+          "score": X,
+          "subsections": {
+            "grammar": {"score": X/100, "comment": "..."},
+            "buzzwords": {"score": X/100, "comment": "..."},
+            "active_voice": {"score": X/100, "comment": "..."},
+            "repetition": {"score": X/100, "comment": "..."}
+          }
+        },
+        "Format_Score": {
+          "score": X,
+          "subsections": {
+            "structure": {"score": X/100, "comment": "..."},
+            "font/layout": {"score": X/100, "comment": "..."},
+            "readability": {"score": X/100, "comment": "..."}
+          }
+        },
+        "weighted_total": X  # Final score based on weighted rubric
+      },
+      "evaluation": "Brief summary of strengths and major areas for improvement"
     }
-    """ + f"{parsed_output} and " + f"Format_score = {format_score}"
+    """+ f"{parsed_output} and " + f"Format_score = {format_score}"
 
     response = model.generate_content(
         prompt,
