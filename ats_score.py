@@ -104,7 +104,8 @@ Now evaluate the following resume content:
     except Exception:
         pass
     try:
-        json_match = re.search(r'\{(?:[^{}]|(?R))*\}', raw_text, re.DOTALL)
+        # Use a simpler regex to find the first JSON object in the response
+        json_match = re.search(r'\{.*\}', raw_text, re.DOTALL)
         if json_match:
             json_string = json_match.group(0)
             data = json.loads(json_string)
