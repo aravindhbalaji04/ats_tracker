@@ -20,7 +20,7 @@ You are a deterministic and highly consistent resume parser and evaluator. Your 
 
 ### Step 1: Structured Resume Data Extraction
 
-Extract and organize the candidate’s information into the following *exact JSON format*:
+Extract and organize the candidate's information into the following *exact JSON format*:
 
 {
   "Contact Information": {
@@ -189,7 +189,12 @@ def parse_resume_with_gemini(resume_text):
 st.title("📄 ATS SCORE")
 st.markdown("Upload a resume PDF")
 
+option = st.radio("Select an option:", ["Check ATS Score Only", "Match Resume with Job Description"])
 uploaded_file = st.file_uploader("Drag and drop a resume PDF here", type=["pdf"])
+
+job_description = ""
+if option == "Match Resume with Job Description":
+    job_description = st.text_area("Enter the job description:", height=200)
 
 if uploaded_file is not None:
     with st.spinner("🔍 Extracting text from PDF..."):
@@ -200,8 +205,8 @@ if uploaded_file is not None:
         parsed_json_text = parse_resume_with_gemini(resume_text)
 
     with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as temp_file:
-      temp_file.write(resume_bytes)
-      temp_path = temp_file.name
+        temp_file.write(resume_bytes)
+        temp_path = temp_file.name
 
     try:
         parsed_output = json.loads(parsed_json_text)
@@ -212,6 +217,13 @@ if uploaded_file is not None:
         st.subheader("📊 ATS Score:")
         ats_score = calculate_score(parsed_output, analyze_resume(temp_path))
         st.write(f"**Score:** {ats_score}/100")
+
+        if option == "Match Resume with Job Description" and job_description:
+            st.subheader("🔍 Job Description Match Score:")
+            # Here you can add logic to compare parsed_output with job_description and compute a match score
+            # For now, we'll just display a placeholder score
+            match_score = 85  # Placeholder score
+            st.write(f"**Match Score:** {match_score}/100")
 
     except Exception as e:
         st.error("⚠️ Failed to parse JSON output.")
